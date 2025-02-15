@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import useGeoLocation from "@/hooks/useGeoLocation";
-import { AlertOctagon, MapPin, RefreshCcwDotIcon } from "lucide-react";
+import { MapPin, RefreshCcw, RefreshCcwDotIcon } from "lucide-react";
 import Loading_Skeleton from "../components/Loading_Skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   useForecastQuery,
   useReversegeoQuery,
   useWeatherQuery,
 } from "@/hooks/useWeather";
+import Alert_Error from "@/components/Alert_Error";
+import Current_Weather from "@/components/Current_Weather";
 
 const Dashboard = () => {
   const {
@@ -21,15 +22,12 @@ const Dashboard = () => {
   const forecastQuery = useForecastQuery(coordinates);
   const locationQuery = useReversegeoQuery(coordinates);
 
-  console.log("weather", weatherQuery.data);
-  console.log("forecast", forecastQuery.data);
-  console.log("location", locationQuery.data);
-
   const handelRefresh = () => {
     getLocation();
     if (coordinates) {
-      // reload weather data
-      //edge case check if same corinate are same use catch data
+      weatherQuery.refetch();
+      forecastQuery.refetch();
+      locationQuery.refetch();
     }
   };
 
@@ -39,22 +37,32 @@ const Dashboard = () => {
 
   if (locationError) {
     return (
-      <Alert variant={"destructive"}>
-        <AlertOctagon className="h-4 w-4" />
-        <AlertTitle>Location error</AlertTitle>
-        <AlertDescription className="flex flex-col gap-4">
-          <p>{locationError}</p>
-          <Button
-            className="w-fit text-red-400"
-            onClick={getLocation}
-            variant={"outline"}
-          >
-            <MapPin className="mr-2 h-4 w-4" />
-            Enable location
-          </Button>
-        </AlertDescription>
-      </Alert>
+      <Alert_Error
+        alertTitle="Location error"
+        alertDescription={locationError}
+        onClickHandler={getLocation}
+        icon={MapPin}
+        iconMessage="Enable location"
+      />
     );
+  }
+
+  const locationName = locationQuery.data?.[0];
+
+  if (weatherQuery.error || forecastQuery.error) {
+    return (
+      <Alert_Error
+        alertTitle="service error"
+        alertDescription="failed to fetch weather data, check your network or try again later"
+        onClickHandler={getLocation}
+        icon={RefreshCcw}
+        iconMessage="Retry"
+      />
+    );
+  }
+
+  if (!weatherQuery.data || !forecastQuery.data) {
+    return <Loading_Skeleton />;
   }
 
   return (
@@ -65,11 +73,22 @@ const Dashboard = () => {
           variant={"outline"}
           size={"icon"}
           onClick={handelRefresh}
-          // disabled={}
+          disabled={weatherQuery.isFetching || forecastQuery.isFetching}
         >
-          <RefreshCcwDotIcon className="h-4 w-4" />
+          <RefreshCcwDotIcon
+            className={`h-4 w-4 ${
+              weatherQuery.isFetching ? "animate-spin" : ""
+            }`}
+          />
         </Button>
       </section>
+
+      <div className="grid gap-6">
+        <section>
+          <Current_Weather data={weatherQuery.data} location={locationName} />
+        </section>
+        <section></section>
+      </div>
     </div>
   );
 };

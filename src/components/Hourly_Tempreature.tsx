@@ -1,7 +1,14 @@
 import type { ForecastData } from "@/api/weather.type";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import { format } from "date-fns";
 
@@ -37,9 +44,50 @@ const Hourly_Tempreature = ({ data }: Hourly_Tempreature_Props) => {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `${value}^`}
+                tickFormatter={(value) => `${value}°`}
               />
-              <Line type={"monotone"} dataKey={"uv"} stroke="#8884d8" />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="rounded-lg border bg-background p-2 shadow-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="flex flex-col">
+                            <span className="text-[0.70rem] uppercase text-muted-foreground">
+                              Temprature
+                            </span>
+                            <span className="font-bold">
+                              {payload[0].value}°
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[0.70rem] uppercase text-muted-foreground">
+                            Feels Like
+                          </span>
+                          <span className="font-bold">{payload[1].value}°</span>
+                        </div>
+                      </div>
+                    );
+                  }
+                }}
+              />
+              <Line
+                type={"bump"}
+                dataKey={"temp"}
+                stroke="#8884d8"
+                strokeWidth={2}
+                dot={true}
+              />
+
+              <Line
+                type={"natural"}
+                dataKey={"feels_like"}
+                stroke="whiteSmoke"
+                strokeWidth={2}
+                dot={false}
+                strokeDasharray="5 5"
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>

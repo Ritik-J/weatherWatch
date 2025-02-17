@@ -10,6 +10,8 @@ import {
 import Alert_Error from "@/components/Alert_Error";
 import Current_Weather from "@/components/Current_Weather";
 import Hourly_Tempreature from "@/components/Hourly_Tempreature";
+import Weather_Deatils from "@/components/Weather_Deatils";
+import Weather_Forecast from "@/components/Weather_Forecast";
 
 const Dashboard = () => {
   const {
@@ -85,11 +87,14 @@ const Dashboard = () => {
       </section>
 
       <div className="grid gap-6">
-        <section className="flex gap-3">
+        <section className="flex flex-col md:flex-row gap-3">
           <Current_Weather data={weatherQuery.data} location={locationName} />
           <Hourly_Tempreature data={forecastQuery.data} />
         </section>
-        <section></section>
+        <section className="grid gap-6 md:grid-cols-2 items-start">
+          <Weather_Deatils data={weatherQuery.data} />
+          <Weather_Forecast data={forecastQuery.data} />
+        </section>
       </div>
     </div>
   );

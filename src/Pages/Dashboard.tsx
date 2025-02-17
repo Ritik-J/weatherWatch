@@ -85,7 +85,7 @@ const Dashboard = () => {
       </section>
 
       <div className="grid gap-6">
-        <section>
+        <section className="flex gap-3">
           <Current_Weather data={weatherQuery.data} location={locationName} />
           <Hourly_Tempreature data={forecastQuery.data} />
         </section>

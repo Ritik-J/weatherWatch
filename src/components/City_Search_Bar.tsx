@@ -10,8 +10,10 @@ import {
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useSearchLocation } from "@/hooks/useWeather";
-import { LoaderPinwheel } from "lucide-react";
+import { Heart, History, LoaderPinwheel, Search, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useSearchHistory from "@/hooks/useSearchHistory";
+import useFavorite from "@/hooks/useFavorite";
 
 const City_Search_Bar = () => {
   const [open, setOpen] = useState(false);
@@ -19,9 +21,20 @@ const City_Search_Bar = () => {
   const navigate = useNavigate();
   const { data: location, isLoading } = useSearchLocation(query);
 
-  const handelSelect = (cityData: string) => {
-    const { lat, lon, name, country } = cityData.split("|");
+  const { addHistory, clearHistory, history } = useSearchHistory();
 
+  const { favorite } = useFavorite();
+
+  const handelSelect = (cityData: string) => {
+    const [lat, lon, name, country] = cityData.split("|");
+
+    addHistory.mutate({
+      query,
+      name,
+      lat: parseFloat(lat),
+      lon: parseFloat(lon),
+      country,
+    });
     setOpen(false);
     navigate(`/city/${name}??lat=${lat}&${lon}`);
   };
@@ -45,16 +58,71 @@ const City_Search_Bar = () => {
           {query.length > 2 && !isLoading && (
             <CommandEmpty>No city found.</CommandEmpty>
           )}
-          <CommandGroup heading="Favorite">
-            <CommandItem>Calendar</CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
+          //fav section
+          {favorite.length > 0 && (
+            <CommandGroup heading="Favorite">
+              {favorite.map((city) => (
+                <CommandItem
+                  key={city.id}
+                  value={`${city.lat}|${city.lon}|${city.name}|${city.country}`}
+                  onSelect={handelSelect}
+                >
+                  <Heart className="mr-2 h-4 w-4 text-yellow-500" />
+                  <span>{city.name}</span>
+                  {city.state && (
+                    <span className="text-sm text-muted-foreground">
+                      , {city.state}
+                    </span>
+                  )}
+                  <span className="text-sm text-muted-foreground">
+                    , {city.country}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
+          //history section
+          {history.length > 0 && (
+            <>
+              <CommandSeparator />
+              <CommandGroup>
+                <div className="flex items-center justify-between px-2 my-2">
+                  <p className="text-xs text-muted-foreground">
+                    Recent Searches
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => clearHistory.mutate()}
+                  >
+                    <XCircle className="h-4 w-4" />
+                    clear
+                  </Button>
+                </div>
 
-          <CommandGroup heading="Recent Search">
-            <CommandItem>Calendar</CommandItem>
-          </CommandGroup>
+                {history.map((location) => (
+                  <CommandItem
+                    key={`${location.lat}-${location.lon}`}
+                    value={`${location.lat}|${location.lon}|${location.name}|${location.country}`}
+                    onSelect={handelSelect}
+                  >
+                    <History className="mr-2 h-4 w-4" />
+                    <span>{location.name}</span>
+                    {location.state && (
+                      <span className="text-sm text-muted-foreground">
+                        📍 {location.state}
+                      </span>
+                    )}
+                    <span className="text-sm text-muted-foreground">
+                      📍 {location.country}
+                    </span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </>
+          )}
           <CommandSeparator />
-
+          //search location section
           {location && location.length > 0 && (
             <CommandGroup heading="Suggestions">
               {isLoading && (
@@ -68,6 +136,7 @@ const City_Search_Bar = () => {
                   value={`${location.lat}|${location.lon}|${location.name}|${location.country}`}
                   onSelect={handelSelect}
                 >
+                  <Search className="mr-2 h-4 w-4" />
                   <span>{location.name}</span>
                   {location.state && (
                     <span className="text-sm text-muted-foreground">

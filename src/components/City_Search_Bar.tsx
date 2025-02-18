@@ -21,6 +21,8 @@ const City_Search_Bar = () => {
 
   const handelSelect = (cityData: string) => {
     const { lat, lon, name, country } = cityData.split("|");
+
+    setOpen(false);
     navigate(`/city/${name}??lat=${lat}&${lon}`);
   };
 

@@ -12,6 +12,7 @@ import Current_Weather from "@/components/Current_Weather";
 import Hourly_Tempreature from "@/components/Hourly_Tempreature";
 import Weather_Deatils from "@/components/Weather_Deatils";
 import Weather_Forecast from "@/components/Weather_Forecast";
+import { FavoriteCities } from "@/components/Favorite_City";
 
 const Dashboard = () => {
   const {
@@ -24,6 +25,8 @@ const Dashboard = () => {
   const weatherQuery = useWeatherQuery(coordinates);
   const forecastQuery = useForecastQuery(coordinates);
   const locationQuery = useReversegeoQuery(coordinates);
+
+  console.log(locationQuery.data);
 
   const handelRefresh = () => {
     getLocation();
@@ -70,6 +73,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-4">
+      <FavoriteCities />
       <section className="flex items-center justify-between">
         <h1 className="text-xl font-bold tracking-tight">My Location</h1>
         <Button

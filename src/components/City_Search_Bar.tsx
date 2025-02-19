@@ -58,7 +58,7 @@ const City_Search_Bar = () => {
           {query.length > 2 && !isLoading && (
             <CommandEmpty>No city found.</CommandEmpty>
           )}
-          //fav section
+
           {favorite.length > 0 && (
             <CommandGroup heading="Favorite">
               {favorite.map((city) => (
@@ -81,7 +81,7 @@ const City_Search_Bar = () => {
               ))}
             </CommandGroup>
           )}
-          //history section
+
           {history.length > 0 && (
             <>
               <CommandSeparator />
@@ -122,7 +122,7 @@ const City_Search_Bar = () => {
             </>
           )}
           <CommandSeparator />
-          //search location section
+
           {location && location.length > 0 && (
             <CommandGroup heading="Suggestions">
               {isLoading && (

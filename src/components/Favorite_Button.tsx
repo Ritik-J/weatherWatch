@@ -2,45 +2,26 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import useFavorite from "@/hooks/useFavorite";
-import { Coordinates, WeatherData } from "@/api/weather.type";
+import { WeatherData } from "@/api/weather.type";
 
 interface FavoriteButtonProps {
   data: WeatherData;
-  coord: Coordinates;
 }
 
 export function FavoriteButton({ data }: FavoriteButtonProps) {
   const { addFavorite, removeFavorite, isFavorite } = useFavorite();
-  console.log("FavoriteButton received data:", data);
 
-  // Check if data is defined
-  if (!data) {
-    console.error("data is undefined");
-    return null;
-  }
-
-  // Check if data.coordinate is defined
-  if (!data.coordinate) {
-    console.error("data.coordinate is undefined", data);
-    return null;
-  }
-
-  console.log("data.coordinate:", data.coordinate);
-
-  const isCurrentlyFavorite = isFavorite(
-    data.coordinate.lat,
-    data.coordinate.lon
-  );
+  const isCurrentlyFavorite = isFavorite(data.coord.lat, data.coord.lon);
 
   const handleToggleFavorite = () => {
     if (isCurrentlyFavorite) {
-      removeFavorite.mutate(`${data.coordinate.lat}-${data.coordinate.lon}`);
+      removeFavorite.mutate(`${data.coord.lat}-${data.coord.lon}`);
       toast.error(`Removed ${data.name} from Favorites`);
     } else {
       addFavorite.mutate({
         name: data.name,
-        lat: data.coordinate.lat,
-        lon: data.coordinate.lon,
+        lat: data.coord.lat,
+        lon: data.coord.lon,
         country: data.sys.country,
       });
       toast.success(`Added ${data.name} to Favorites`);

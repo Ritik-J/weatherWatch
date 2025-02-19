@@ -36,7 +36,7 @@ const City_Search_Bar = () => {
       country,
     });
     setOpen(false);
-    navigate(`/city/${name}??lat=${lat}&${lon}`);
+    navigate(`/city/${name}?lat=${lat}&lon=${lon}`);
   };
 
   return (

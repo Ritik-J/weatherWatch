@@ -13,6 +13,7 @@ import Hourly_Tempreature from "@/components/Hourly_Tempreature";
 import Weather_Deatils from "@/components/Weather_Deatils";
 import Weather_Forecast from "@/components/Weather_Forecast";
 import { FavoriteCities } from "@/components/Favorite_City";
+import Weather_news from "@/components/Weather_news";
 
 const Dashboard = () => {
   const {
@@ -25,8 +26,6 @@ const Dashboard = () => {
   const weatherQuery = useWeatherQuery(coordinates);
   const forecastQuery = useForecastQuery(coordinates);
   const locationQuery = useReversegeoQuery(coordinates);
-
-  console.log(locationQuery.data);
 
   const handelRefresh = () => {
     getLocation();
@@ -96,7 +95,10 @@ const Dashboard = () => {
           <Hourly_Tempreature data={forecastQuery.data} />
         </section>
         <section className="grid gap-6 md:grid-cols-2 items-start">
-          <Weather_Deatils data={weatherQuery.data} />
+          <div className="flex flex-col gap-1">
+            <Weather_Deatils data={weatherQuery.data} />
+            <Weather_news />
+          </div>
           <Weather_Forecast data={forecastQuery.data} />
         </section>
       </div>

@@ -10,10 +10,10 @@ import { AlertOctagon } from "lucide-react";
 import { useParams, useSearchParams } from "react-router-dom";
 
 const City = () => {
-  const [SearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const params = useParams();
-  const lat = parseFloat(SearchParams.get("lat") || "0");
-  const lon = parseFloat(SearchParams.get("lon") || "0");
+  const lat = parseFloat(searchParams.get("lat") || "0");
+  const lon = parseFloat(searchParams.get("lon") || "0");
 
   const coordinate = { lat, lon };
 

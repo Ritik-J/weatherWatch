@@ -83,7 +83,7 @@ const Hourly_Tempreature = ({ data }: Hourly_Tempreature_Props) => {
               <Line
                 type={"natural"}
                 dataKey={"feels_like"}
-                stroke="whiteSmoke"
+                stroke="cyan"
                 strokeWidth={2}
                 dot={false}
                 strokeDasharray="5 5"

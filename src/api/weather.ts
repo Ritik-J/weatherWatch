@@ -3,6 +3,7 @@ import {
   Coordinates,
   ForecastData,
   getGeocodingData,
+  getWeatherMaps,
   WeatherData,
 } from "./weather.type";
 
@@ -61,6 +62,14 @@ class WeatherAPI {
     });
 
     return this.fetchData<getGeocodingData[]>(url);
+  }
+
+  async weatherMap({ layer, z, x, y }: getWeatherMaps): Promise<string> {
+    const url = this.createUrl(
+      `https://tile.openweathermap.org/map/${layer}/${z}/${x}/${y}.png`,
+      {}
+    );
+    return url;
   }
 }
 

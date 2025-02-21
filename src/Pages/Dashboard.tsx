@@ -13,7 +13,7 @@ import Hourly_Tempreature from "@/components/Hourly_Tempreature";
 import Weather_Deatils from "@/components/Weather_Deatils";
 import Weather_Forecast from "@/components/Weather_Forecast";
 import { FavoriteCities } from "@/components/Favorite_City";
-import Weather_news from "@/components/Weather_news";
+import Weather_Map from "@/components/Weather_Map";
 
 const Dashboard = () => {
   const {
@@ -97,7 +97,7 @@ const Dashboard = () => {
         <section className="grid gap-6 md:grid-cols-2 items-start">
           <div className="flex flex-col gap-1">
             <Weather_Deatils data={weatherQuery.data} />
-            <Weather_news />
+            <Weather_Map />
           </div>
           <Weather_Forecast data={forecastQuery.data} />
         </section>

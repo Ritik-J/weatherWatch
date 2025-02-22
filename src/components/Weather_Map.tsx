@@ -1,10 +1,12 @@
+import { MapContainer, ImageOverlay } from "react-leaflet";
 import { useWeatherMapQuery } from "@/hooks/useWeather";
+import "leaflet/dist/leaflet.css";
 
-const Weather_Map = () => {
-  const layer = "clouds_new";
-  const z = 2; // Subcontinental area zoom level
-  const x = 1; // Example x coordinate for subcontinental area
-  const y = 3; // Example y coordinate for subcontinental area
+const Weather_Map = ({ lat, lon }) => {
+  const layer = "temp_new";
+  const z = 2;
+  const x = 1;
+  const y = 3;
 
   const params = { layer, x, y, z };
   const { data: mapUrl, isLoading, error } = useWeatherMapQuery(params);
@@ -12,10 +14,21 @@ const Weather_Map = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching map</div>;
 
+  const bounds = [
+    [lat - 0.5, lon - 0.5],
+    [lat + 0.5, lon + 0.5],
+  ];
+
   return (
     <div>
       <h1>Weather Map</h1>
-      {mapUrl && <img src={mapUrl} alt="Weather Map" />}
+      <MapContainer
+        center={[lat, lon]}
+        zoom={z}
+        style={{ height: "600px", width: "100%" }}
+      >
+        <ImageOverlay url={mapUrl} bounds={bounds} />
+      </MapContainer>
     </div>
   );
 };

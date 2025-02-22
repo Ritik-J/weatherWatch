@@ -97,7 +97,7 @@ const Dashboard = () => {
         <section className="grid gap-6 md:grid-cols-2 items-start">
           <div className="flex flex-col gap-1">
             <Weather_Deatils data={weatherQuery.data} />
-            <Weather_Map />
+            <Weather_Map lat={locationName?.lat} lon={locationName?.lon} />
           </div>
           <Weather_Forecast data={forecastQuery.data} />
         </section>

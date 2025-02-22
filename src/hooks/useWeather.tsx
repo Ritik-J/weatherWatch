@@ -1,5 +1,5 @@
 import { weatherAPI } from "@/api/weather";
-import { Coordinates, getWeatherMaps } from "@/api/weather.type";
+import { Coordinates } from "@/api/weather.type";
 import { useQuery } from "@tanstack/react-query";
 
 export const WEATHER_KEYS = {
@@ -7,7 +7,6 @@ export const WEATHER_KEYS = {
   forecast: (coords: Coordinates) => ["forecast", coords] as const,
   location: (coords: Coordinates) => ["location", coords] as const,
   search: (query: string) => ["location-search", query] as const,
-  map: (params: getWeatherMaps) => ["map", params] as const,
 } as const;
 
 export const useWeatherQuery = (coordinates: Coordinates | null) => {
@@ -39,13 +38,5 @@ export const useSearchLocation = (query: string) => {
     queryKey: WEATHER_KEYS.search(query),
     queryFn: () => weatherAPI.searchLocation(query),
     enabled: query.length >= 3,
-  });
-};
-
-export const useWeatherMapQuery = (params: getWeatherMaps | null) => {
-  return useQuery({
-    queryKey: WEATHER_KEYS.map(params ?? { layer: "", x: 0, y: 0, z: 0 }),
-    queryFn: () => (params ? weatherAPI.weatherMap(params) : null),
-    enabled: !!params,
   });
 };

@@ -58,10 +58,3 @@ export interface getGeocodingData {
   country: string;
   state?: string;
 }
-
-export interface getWeatherMaps {
-  layer: string;
-  x: number;
-  y: number;
-  z: number;
-}

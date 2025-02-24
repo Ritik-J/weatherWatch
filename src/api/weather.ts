@@ -1,5 +1,6 @@
 import { API_CONFIG } from "./api-config";
 import {
+  AirPollutionData,
   Coordinates,
   ForecastData,
   getGeocodingData,
@@ -61,6 +62,16 @@ class WeatherAPI {
     });
 
     return this.fetchData<getGeocodingData[]>(url);
+  }
+
+  async airPollution({ lat, lon }: Coordinates): Promise<AirPollutionData[]> {
+    const url = this.createUrl(`${API_CONFIG.BASE_URL}/air_pollution`, {
+      lat: lat.toString(),
+      lon: lon.toString(),
+      limit: 1,
+    });
+
+    return await this.fetchData<AirPollutionData[]>(url);
   }
 }
 

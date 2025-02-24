@@ -58,3 +58,8 @@ export interface getGeocodingData {
   country: string;
   state?: string;
 }
+
+export interface AirPollutionData {
+  lat: number;
+  lon: number;
+}

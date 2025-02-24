@@ -7,6 +7,7 @@ export const WEATHER_KEYS = {
   forecast: (coords: Coordinates) => ["forecast", coords] as const,
   location: (coords: Coordinates) => ["location", coords] as const,
   search: (query: string) => ["location-search", query] as const,
+  air: (coords: Coordinates) => ["air-pollution", coords] as const,
 } as const;
 
 export const useWeatherQuery = (coordinates: Coordinates | null) => {
@@ -29,6 +30,14 @@ export const useReversegeoQuery = (coordinates: Coordinates | null) => {
   return useQuery({
     queryKey: WEATHER_KEYS.location(coordinates ?? { lat: 0, lon: 0 }),
     queryFn: () => (coordinates ? weatherAPI.getGeoData(coordinates) : null),
+    enabled: !!coordinates,
+  });
+};
+
+export const useAirPollution = (coordinates: Coordinates | null) => {
+  return useQuery({
+    queryKey: WEATHER_KEYS.air(coordinates ?? { lat: 0, lon: 0 }),
+    queryFn: () => (coordinates ? weatherAPI.airPollution(coordinates) : null),
     enabled: !!coordinates,
   });
 };

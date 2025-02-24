@@ -3,6 +3,7 @@ import useGeoLocation from "@/hooks/useGeoLocation";
 import { MapPin, RefreshCcw, RefreshCcwDotIcon } from "lucide-react";
 import Loading_Skeleton from "../components/Loading_Skeleton";
 import {
+  useAirPollution,
   useForecastQuery,
   useReversegeoQuery,
   useWeatherQuery,
@@ -13,6 +14,7 @@ import Hourly_Tempreature from "@/components/Hourly_Tempreature";
 import Weather_Deatils from "@/components/Weather_Deatils";
 import Weather_Forecast from "@/components/Weather_Forecast";
 import { FavoriteCities } from "@/components/Favorite_City";
+import Air_Pollution from "@/components/Air_Pollution";
 
 const Dashboard = () => {
   const {
@@ -25,6 +27,8 @@ const Dashboard = () => {
   const weatherQuery = useWeatherQuery(coordinates);
   const forecastQuery = useForecastQuery(coordinates);
   const locationQuery = useReversegeoQuery(coordinates);
+  const airPollutionQuery = useAirPollution(coordinates);
+  console.log(airPollutionQuery.data);
 
   const handelRefresh = () => {
     getLocation();
@@ -96,6 +100,7 @@ const Dashboard = () => {
         <section className="grid gap-6 md:grid-cols-2 items-start">
           <div className="flex flex-col gap-1">
             <Weather_Deatils data={weatherQuery.data} />
+            <Air_Pollution />
           </div>
           <Weather_Forecast data={forecastQuery.data} />
         </section>

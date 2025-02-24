@@ -28,7 +28,6 @@ const Dashboard = () => {
   const forecastQuery = useForecastQuery(coordinates);
   const locationQuery = useReversegeoQuery(coordinates);
   const airPollutionQuery = useAirPollution(coordinates);
-  console.log(airPollutionQuery.data);
 
   const handelRefresh = () => {
     getLocation();
@@ -98,9 +97,9 @@ const Dashboard = () => {
           <Hourly_Tempreature data={forecastQuery.data} />
         </section>
         <section className="grid gap-6 md:grid-cols-2 items-start">
-          <div className="flex flex-col gap-1">
+          <div className="grid grid-col-2 gap-3 h-full">
             <Weather_Deatils data={weatherQuery.data} />
-            <Air_Pollution />
+            <Air_Pollution data={airPollutionQuery.data} />
           </div>
           <Weather_Forecast data={forecastQuery.data} />
         </section>

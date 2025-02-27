@@ -1,5 +1,9 @@
+import { AirPollutionData } from "@/api/weather.type";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
+interface AirPollutionDataProp {
+  data: AirPollutionData | null | undefined;
+}
 const AQI = ({ n }: { n: number }) => {
   let bgColor, text;
 
@@ -39,7 +43,7 @@ const AQI = ({ n }: { n: number }) => {
   );
 };
 
-const Air_Pollution = ({ data }) => {
+const Air_Pollution = ({ data }: AirPollutionDataProp) => {
   if (!data || !data.list) {
     return <p>Data is not available</p>;
   }
